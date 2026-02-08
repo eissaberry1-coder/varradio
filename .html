@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radio VAR</title>
+
+<style>
+/* --- إعدادات أساسية --- */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  background: linear-gradient(135deg, #ff7a00, #ffb347);
+  overflow: hidden;
+  background-size: 200% 200%;
+  animation: bgMove 20s ease infinite;
+}
+
+/* --- حركة خلفية بسيطة --- */
+@keyframes bgMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* --- اللوجو المتحرك وعالي الجودة --- */
+@keyframes logoBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+.logo {
+  width: 420px;
+  max-width: 90%;
+  height: auto;
+  margin-bottom: 30px;
+  filter: drop-shadow(0 10px 25px rgba(0,0,0,0.35));
+  animation: logoBounce 2s ease-in-out infinite;
+  image-rendering: auto;
+}
+
+/* --- عنوان الراديو --- */
+h1 {
+  margin-bottom: 25px;
+  font-size: 28px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  animation: fadeIn 2s ease forwards;
+  opacity: 0;
+}
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* --- زر التشغيل --- */
+button {
+  background: linear-gradient(45deg, #000000, #333333);
+  color: white;
+  border: none;
+  padding: 20px 55px;
+  font-size: 22px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+  position: relative;
+  overflow: hidden;
+}
+button:hover {
+  transform: scale(1.07);
+  background: linear-gradient(45deg, #111111, #555555);
+}
+button::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: 0.3s;
+}
+button.playing::after {
+  width: 200px;
+  height: 200px;
+}
+
+/* --- متجاوب --- */
+@media(max-width:600px){
+  .logo { width: 260px; }
+  h1 { font-size: 20px; }
+  button { font-size: 16px; padding: 14px 25px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- اللوجو -->
+<img src="https://i.ibb.co/Vp2rZxc3/LOGO-MOTION-Radio-copy.png" class="logo" alt="Radio VAR Logo">
+
+<!-- العنوان الجديد الديناميكي -->
+<h1>🔊 Live on Air – Radio VAR</h1>
+
+<button onclick="toggleRadio()">🎵 Play</button>
+
+<!-- ضع رابط البث المباشر هنا -->
+<audio id="radio" src="http://your-stream-server:8000/stream"></audio>
+
+<script>
+const radio = document.getElementById('radio');
+const button = document.querySelector('button');
+
+function toggleRadio() {
+  if (radio.paused) {
+    radio.play();
+    button.textContent = '⏸️ Pause';
+    button.classList.add('playing');
+  } else {
+    radio.pause();
+    button.textContent = '🎵 Play';
+    button.classList.remove('playing');
+  }
+}
+
+// لإظهار رسالة عند التحميل
+radio.addEventListener('waiting', () => {
+  button.textContent = '🔄 Loading...';
+});
+
+radio.addEventListener('playing', () => {
+  button.textContent = '⏸️ Pause';
+  button.classList.add('playing');
+});
+</script>
+
+</body>
+</html>
