@@ -103,31 +103,30 @@ button.playing::after {
 <img src="https://i.ibb.co/Vp2rZxc3/LOGO-MOTION-Radio-copy.png" class="logo" alt="VAR Radio Logo">
 <h1>🔊 Live on Air – VAR Radio</h1>
 
-<button onclick="toggleRadio()">🎵 Play</button>
+<button id="playBtn">🎵 Play</button>
 
-<!-- رابط البث المباشر -->
-<audio id="radio" src="http://httpvarradiolist.listen2myradio.com" preload="none"></audio>
+<audio id="radio" preload="none"></audio>
 
 <script>
 const radio = document.getElementById('radio');
-const button = document.querySelector('button');
+const button = document.getElementById('playBtn');
 
-function toggleRadio() {
-  if (radio.paused) {
-    radio.play().catch(e => {
-      alert("Playback failed. Check browser autoplay settings.");
-    });
+// رابط البث المباشر (يفضل HTTPS إذا متاح)
+const streamURL = "https://httpvarradiolist.listen2myradio.com/"; 
+radio.src = streamURL;
+
+button.addEventListener('click', () => {
+  radio.play().then(() => {
     button.textContent = '⏸️ Pause';
     button.classList.add('playing');
-  } else {
-    radio.pause();
-    button.textContent = '🎵 Play';
-    button.classList.remove('playing');
-  }
-}
+  }).catch(err => {
+    alert("Playback blocked by browser. Please click the Play button to start listening.");
+  });
+});
 
-radio.addEventListener('waiting', () => {
-  button.textContent = '🔄 Loading...';
+radio.addEventListener('pause', () => {
+  button.textContent = '🎵 Play';
+  button.classList.remove('playing');
 });
 
 radio.addEventListener('playing', () => {
