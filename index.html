@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VAR Radio Live</title>
+<title>Radio VAR</title>
 
 <style>
+/* --- إعدادات أساسية --- */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -17,16 +18,23 @@ body {
   text-align: center;
   color: white;
   background: linear-gradient(135deg, #ff7a00, #ffb347);
+  overflow: hidden;
   background-size: 200% 200%;
   animation: bgMove 20s ease infinite;
 }
 
+/* --- حركة خلفية بسيطة --- */
 @keyframes bgMove {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
+/* --- اللوجو المتحرك وعالي الجودة --- */
+@keyframes logoBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
 .logo {
   width: 420px;
   max-width: 90%;
@@ -34,13 +42,10 @@ body {
   margin-bottom: 30px;
   filter: drop-shadow(0 10px 25px rgba(0,0,0,0.35));
   animation: logoBounce 2s ease-in-out infinite;
+  image-rendering: auto;
 }
 
-@keyframes logoBounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
-}
-
+/* --- عنوان الراديو --- */
 h1 {
   margin-bottom: 25px;
   font-size: 28px;
@@ -48,11 +53,11 @@ h1 {
   animation: fadeIn 2s ease forwards;
   opacity: 0;
 }
-
 @keyframes fadeIn {
   to { opacity: 1; }
 }
 
+/* --- زر التشغيل --- */
 button {
   background: linear-gradient(45deg, #000000, #333333);
   color: white;
@@ -66,12 +71,10 @@ button {
   position: relative;
   overflow: hidden;
 }
-
 button:hover {
   transform: scale(1.07);
   background: linear-gradient(45deg, #111111, #555555);
 }
-
 button::after {
   content: "";
   position: absolute;
@@ -84,12 +87,12 @@ button::after {
   transform: translate(-50%, -50%);
   transition: 0.3s;
 }
-
 button.playing::after {
   width: 200px;
   height: 200px;
 }
 
+/* --- متجاوب --- */
 @media(max-width:600px){
   .logo { width: 260px; }
   h1 { font-size: 20px; }
@@ -100,33 +103,36 @@ button.playing::after {
 
 <body>
 
-<img src="https://i.ibb.co/Vp2rZxc3/LOGO-MOTION-Radio-copy.png" class="logo" alt="VAR Radio Logo">
-<h1>🔊 Live on Air – VAR Radio</h1>
+<!-- اللوجو -->
+<img src="https://i.ibb.co/Vp2rZxc3/LOGO-MOTION-Radio-copy.png" class="logo" alt="Radio VAR Logo">
 
-<button id="playBtn">🎵 Play</button>
+<!-- العنوان الجديد الديناميكي -->
+<h1>🔊 Live on Air – Radio VAR</h1>
 
-<audio id="radio" preload="none"></audio>
+<button onclick="toggleRadio()">🎵 Play</button>
+
+<!-- ضع رابط البث المباشر هنا -->
+<audio id="radio" src="http://your-stream-server:8000/stream"></audio>
 
 <script>
 const radio = document.getElementById('radio');
-const button = document.getElementById('playBtn');
+const button = document.querySelector('button');
 
-// الرابط المباشر للبث HTTPS من Listen2MyRadio
-const streamURL = "https://uk19freenew.listen2myradio.com:11221/stream"; 
-radio.src = streamURL;
-
-button.addEventListener('click', () => {
-  radio.play().then(() => {
+function toggleRadio() {
+  if (radio.paused) {
+    radio.play();
     button.textContent = '⏸️ Pause';
     button.classList.add('playing');
-  }).catch(err => {
-    alert("Playback blocked by browser. Please click the Play button to start listening.");
-  });
-});
+  } else {
+    radio.pause();
+    button.textContent = '🎵 Play';
+    button.classList.remove('playing');
+  }
+}
 
-radio.addEventListener('pause', () => {
-  button.textContent = '🎵 Play';
-  button.classList.remove('playing');
+// لإظهار رسالة عند التحميل
+radio.addEventListener('waiting', () => {
+  button.textContent = '🔄 Loading...';
 });
 
 radio.addEventListener('playing', () => {
