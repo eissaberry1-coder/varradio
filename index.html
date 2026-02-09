@@ -30,7 +30,7 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* --- اللوجو المتحرك وعالي الجودة --- */
+/* --- اللوجو المتحرك --- */
 @keyframes logoBounce {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-15px); }
@@ -103,16 +103,14 @@ button.playing::after {
 
 <body>
 
-<!-- اللوجو -->
 <img src="https://i.ibb.co/Vp2rZxc3/LOGO-MOTION-Radio-copy.png" class="logo" alt="Radio VAR Logo">
 
-<!-- العنوان الجديد الديناميكي -->
 <h1>🔊 Live on Air – Radio VAR</h1>
 
 <button onclick="toggleRadio()">🎵 Play</button>
 
-<!-- ضع رابط البث المباشر هنا -->
-<audio id="radio" src="127.0.0.1:8000/stream"></audio>
+<!-- ✅ رابط البث المعدل -->
+<audio id="radio" src="http://185.56.195.159:8000/"></audio>
 
 <script>
 const radio = document.getElementById('radio');
@@ -130,7 +128,6 @@ function toggleRadio() {
   }
 }
 
-// لإظهار رسالة عند التحميل
 radio.addEventListener('waiting', () => {
   button.textContent = '🔄 Loading...';
 });
@@ -143,4 +140,3 @@ radio.addEventListener('playing', () => {
 
 </body>
 </html>
-
