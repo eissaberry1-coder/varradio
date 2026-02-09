@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +23,6 @@ body {
   animation: bgMove 20s ease infinite;
 }
 
-/* --- حركة خلفية بسيطة --- */
 @keyframes bgMove {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -53,9 +52,7 @@ h1 {
   animation: fadeIn 2s ease forwards;
   opacity: 0;
 }
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
+@keyframes fadeIn { to { opacity: 1; } }
 
 /* --- زر التشغيل --- */
 button {
@@ -107,18 +104,20 @@ button.playing::after {
 
 <h1>🔊 Live on Air – Radio VAR</h1>
 
-<button onclick="toggleRadio()">🎵 Play</button>
+<button id="playBtn">🎵 Play</button>
 
 <!-- ✅ رابط البث المعدل -->
 <audio id="radio" src="http://185.56.195.159:8000/"></audio>
 
 <script>
 const radio = document.getElementById('radio');
-const button = document.querySelector('button');
+const button = document.getElementById('playBtn');
 
-function toggleRadio() {
+button.addEventListener('click', () => {
   if (radio.paused) {
-    radio.play();
+    radio.play().catch(err => {
+      console.log("Autoplay blocked, user must interact first", err);
+    });
     button.textContent = '⏸️ Pause';
     button.classList.add('playing');
   } else {
@@ -126,8 +125,9 @@ function toggleRadio() {
     button.textContent = '🎵 Play';
     button.classList.remove('playing');
   }
-}
+});
 
+// تحديث النص تلقائياً أثناء التحميل
 radio.addEventListener('waiting', () => {
   button.textContent = '🔄 Loading...';
 });
@@ -135,6 +135,11 @@ radio.addEventListener('waiting', () => {
 radio.addEventListener('playing', () => {
   button.textContent = '⏸️ Pause';
   button.classList.add('playing');
+});
+
+radio.addEventListener('pause', () => {
+  button.textContent = '🎵 Play';
+  button.classList.remove('playing');
 });
 </script>
 
